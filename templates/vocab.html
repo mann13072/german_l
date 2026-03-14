@@ -27,7 +27,9 @@
 {% set sec = level.vocab_sections[0] %}
 <div class="vocab-section" id="tab-{{ sec.id }}">
     <div class="section-header">
+        {% if sec.title != (level.name ~ ' – Vocabulary') %}
         <h2 id="vocab-label-{{ sec.id }}">{{ sec.title }}</h2>
+        {% endif %}
         <div class="section-controls" role="group" aria-label="Vocab controls">
             <button class="btn btn-sm" onclick="toggleAll('{{ sec.id }}')" aria-label="Show or hide all cards">Show/Hide All</button>
             <button class="btn btn-sm" onclick="shuffleCards('{{ sec.id }}')" aria-label="Shuffle cards">🔀 Shuffle</button>
