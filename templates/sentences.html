@@ -1,12 +1,12 @@
 {% if not partial %}{% extends "base.html" %}{% endif %}
-{% block title %}Sentence Making{% endblock %}
+{% block title %}{{ level.name }}{% endblock %}
 
 {% block content %}
 <div class="page-header" style="--level-color: {{ level.color }};">
     <div class="breadcrumb">
-        <a href="/">Roadmap</a> › <span>Sentence Making</span> › <span>{{ level.id|upper }}</span>
+        <a href="/">Roadmap</a> › <span>{{ level.id|upper }}</span>
     </div>
-    <h1>✍️ {{ level.name }} – Sentence Making</h1>
+    <h1>✍️ {{ level.name }}</h1>
     <p>{{ level.description }}</p>
 
     <div class="level-nav">
