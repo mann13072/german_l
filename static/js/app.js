@@ -390,8 +390,10 @@ async function loadDefinition(word, container) {
         
         if (html) {
             container.innerHTML = html;
+            container.closest('.vocab-back').classList.add('has-definition');
         } else {
             container.innerHTML = '';
+            container.closest('.vocab-back').classList.remove('has-definition');
         }
     } catch (e) {
         console.log(`No official definition for ${word}`);
