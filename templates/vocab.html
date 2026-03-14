@@ -77,8 +77,13 @@
                 <div class="quiz-score" id="quizScore-{{ sec.id }}">Score: 0 / 0</div>
             </div>
         </div>
-        <button class="btn btn-primary" style="background: {{ level.color }};" 
+        <button class="btn btn-primary level-color-btn" 
                 onclick="startQuiz('{{ sec.id }}')">Start Quiz</button>
+        <style>
+            .level-color-btn {
+                background: {{ level.color }};
+            }
+        </style>
     </div>
 
     <!-- Adjective Comparative & Superlative Exercises (UI placeholder) -->
