@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Animated German Words Background -->
+<div class="words-background">
+    <div class="word-line scroll-right">
+        <span>Liebe • Freundschaft • Glück • Träume • Hoffnung • Abenteuer • Wissen • Reise • Musik • Leben • Freiheit • Natur • Kunst • Familie • Zukunft • Sonne • Stern • Welt • Herz • Seele •</span>
+        <span>Liebe • Freundschaft • Glück • Träume • Hoffnung • Abenteuer • Wissen • Reise • Musik • Leben • Freiheit • Natur • Kunst • Familie • Zukunft • Sonne • Stern • Welt • Herz • Seele •</span>
+    </div>
+    <div class="word-line scroll-left">
+        <span>Schmetterling • Regenbogen • Blume • Himmel • Ozean • Berg • Fluss • Wald • Garten • Morgen • Abend • Nacht • Tag • Stunde • Minute • Zeit • Raum • Licht • Schatten • Wind •</span>
+        <span>Schmetterling • Regenbogen • Blume • Himmel • Ozean • Berg • Fluss • Wald • Garten • Morgen • Abend • Nacht • Tag • Stunde • Minute • Zeit • Raum • Licht • Schatten • Wind •</span>
+    </div>
+    <div class="word-line scroll-right">
+        <span>Buch • Stift • Schule • Lehrer • Student • Wort • Satz • Sprache • Deutsch • Lernen • Verstehen • Sprechen • Lesen • Schreiben • Hören • Frage • Antwort • Idee • Gedanke • Meinung •</span>
+        <span>Buch • Stift • Schule • Lehrer • Student • Wort • Satz • Sprache • Deutsch • Lernen • Verstehen • Sprechen • Lesen • Schreiben • Hören • Frage • Antwort • Idee • Gedanke • Meinung •</span>
+    </div>
+    <div class="word-line scroll-left">
+        <span>Kaffee • Brot • Wasser • Essen • Trinken • Kochen • Frühstück • Mittagessen • Abendessen • Kuchen • Obst • Gemüse • Fleisch • Fisch • Käse • Milch • Tee • Saft • Wein • Bier •</span>
+        <span>Kaffee • Brot • Wasser • Essen • Trinken • Kochen • Frühstück • Mittagessen • Abendessen • Kuchen • Obst • Gemüse • Fleisch • Fisch • Käse • Milch • Tee • Saft • Wein • Bier •</span>
+    </div>
+    <div class="word-line scroll-right">
+        <span>Haus • Wohnung • Zimmer • Küche • Bad • Schlafzimmer • Wohnzimmer • Tür • Fenster • Tisch • Stuhl • Bett • Sofa • Lampe • Uhr • Spiegel • Bild • Teppich • Vorhang • Regal •</span>
+        <span>Haus • Wohnung • Zimmer • Küche • Bad • Schlafzimmer • Wohnzimmer • Tür • Fenster • Tisch • Stuhl • Bett • Sofa • Lampe • Uhr • Spiegel • Bild • Teppich • Vorhang • Regal •</span>
+    </div>
+    <div class="word-line scroll-left">
+        <span>Auto • Fahrrad • Bus • Zug • Flugzeug • Straße • Weg • Brücke • Stadt • Dorf • Land • Platz • Park • Bahnhof • Flughafen • Haltestelle • Ampel • Kreuzung • Tankstelle • Garage •</span>
+        <span>Auto • Fahrrad • Bus • Zug • Flugzeug • Straße • Weg • Brücke • Stadt • Dorf • Land • Platz • Park • Bahnhof • Flughafen • Haltestelle • Ampel • Kreuzung • Tankstelle • Garage •</span>
+    </div>
+    <div class="word-line scroll-right">
+        <span>Arbeit • Beruf • Chef • Kollege • Büro • Firma • Projekt • Meeting • Termin • Erfolg • Ziel • Plan • Aufgabe • Lösung • Problem • Chance • Risiko • Gewinn • Verlust • Geld •</span>
+        <span>Arbeit • Beruf • Chef • Kollege • Büro • Firma • Projekt • Meeting • Termin • Erfolg • Ziel • Plan • Aufgabe • Lösung • Problem • Chance • Risiko • Gewinn • Verlust • Geld •</span>
+    </div>
+    <div class="word-line scroll-left">
+        <span>Sport • Fußball • Tennis • Schwimmen • Laufen • Fitness • Yoga • Tanz • Spiel • Mannschaft • Trainer • Gewinner • Verlierer • Medaille • Pokal • Rekord • Training • Wettkampf • Stadion • Halle •</span>
+        <span>Sport • Fußball • Tennis • Schwimmen • Laufen • Fitness • Yoga • Tanz • Spiel • Mannschaft • Trainer • Gewinner • Verlierer • Medaille • Pokal • Rekord • Training • Wettkampf • Stadion • Halle •</span>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<section class="landing-hero">
+    <h1 class="landing-title">Willkommen!</h1>
+    <p class="landing-subtitle">Was möchtest du heute lernen?</p>
+</section>
+
+<!-- Level Tiles -->
+<section class="level-tiles">
+    <div class="level-tile" style="--tile-color: #22c55e;">
+        <div class="tile-header">
+            <span class="tile-icon">🌱</span>
+            <span class="tile-badge">A1</span>
+        </div>
+        <h2 class="tile-title">Beginner</h2>
+        <div class="tile-links">
+            <a href="/vocab/a1" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">📚</span> Vocabulary
+            </a>
+            <a href="/sentences/a1" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">✍️</span> Sentence Construction
+            </a>
+        </div>
+    </div>
+    
+    <div class="level-tile" style="--tile-color: #3b82f6;">
+        <div class="tile-header">
+            <span class="tile-icon">📘</span>
+            <span class="tile-badge">A2</span>
+        </div>
+        <h2 class="tile-title">Elementary</h2>
+        <div class="tile-links">
+            <a href="/vocab/a2" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">📚</span> Vocabulary
+            </a>
+            <a href="/sentences/a2" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">✍️</span> Sentence Construction
+            </a>
+        </div>
+    </div>
+    
+    <div class="level-tile" style="--tile-color: #f59e0b;">
+        <div class="tile-header">
+            <span class="tile-icon">⚡</span>
+            <span class="tile-badge">B1</span>
+        </div>
+        <h2 class="tile-title">Intermediate</h2>
+        <div class="tile-links">
+            <a href="/vocab/b1" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">📚</span> Vocabulary
+            </a>
+            <a href="/sentences/b1" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">✍️</span> Sentence Construction
+            </a>
+        </div>
+    </div>
+    
+    <div class="level-tile" style="--tile-color: #ef4444;">
+        <div class="tile-header">
+            <span class="tile-icon">🎯</span>
+            <span class="tile-badge">B2</span>
+        </div>
+        <h2 class="tile-title">Advanced</h2>
+        <div class="tile-links">
+            <a href="/vocab/b2" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">📚</span> Vocabulary
+            </a>
+            <a href="/sentences/b2" class="tile-link" onclick="burstAndNavigate(event, this.href)">
+                <span class="link-icon">✍️</span> Sentence Construction
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Bubble Container for Animation -->
+<div id="bubble-container"></div>
+{% endblock %}

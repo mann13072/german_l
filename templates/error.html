@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Error – German Learning App{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 100px 20px; text-align: center;">
+    <h1 style="font-size: 4rem; margin-bottom: 20px;">Oops! 🇩🇪</h1>
+    <h2 style="color: #ef4444; margin-bottom: 30px;">{{ error }}</h2>
+    <p style="margin-bottom: 40px; color: #6b7280; font-size: 1.2rem;">
+        Etwas ist schief gelaufen. Let's get you back on track.
+    </p>
+    <a href="/" class="btn btn-primary" style="display: inline-block;">
+        Back to Roadmap
+    </a>
+</div>
+{% endblock %}
