@@ -19,33 +19,35 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="/" class="nav-brand">
-            <span class="nav-flag">🇩🇪</span>
-            <span>Deutsch Lernen</span>
-        </a>
-        <div class="nav-links">
-            <a href="/">Roadmap</a>
-            <div class="nav-dropdown">
-                <button class="nav-dropdown-btn">Vocab ▾</button>
-                <div class="nav-dropdown-content">
-                    <a href="/vocab/a1">A1 – Beginner</a>
-                    <a href="/vocab/a2">A2 – Elementary</a>
-                    <a href="/vocab/b1">B1 – Intermediate</a>
-                    <a href="/vocab/b2">B2 – Upper Intermediate</a>
+        <div class="layout-container navbar-inner">
+            <a href="/" class="nav-brand">
+                <span class="nav-flag">🇩🇪</span>
+                <span>Deutsch Lernen</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Roadmap</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">Vocab ▾</button>
+                    <div class="nav-dropdown-content">
+                        <a href="/vocab/a1">A1 – Beginner</a>
+                        <a href="/vocab/a2">A2 – Elementary</a>
+                        <a href="/vocab/b1">B1 – Intermediate</a>
+                        <a href="/vocab/b2">B2 – Upper Intermediate</a>
+                    </div>
                 </div>
-            </div>
-            <div class="nav-dropdown">
-                <button class="nav-dropdown-btn">Sentences ▾</button>
-                <div class="nav-dropdown-content">
-                    <a href="/sentences/a1">A1 – Beginner</a>
-                    <a href="/sentences/a2">A2 – Elementary</a>
-                    <a href="/sentences/b1">B1 – Intermediate</a>
-                    <a href="/sentences/b2">B2 – Upper Intermediate</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">Sentences ▾</button>
+                    <div class="nav-dropdown-content">
+                        <a href="/sentences/a1">A1 – Beginner</a>
+                        <a href="/sentences/a2">A2 – Elementary</a>
+                        <a href="/sentences/b1">B1 – Intermediate</a>
+                        <a href="/sentences/b2">B2 – Upper Intermediate</a>
+                    </div>
                 </div>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
             </div>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
         </div>
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
     </nav>
     <div class="mobile-menu" id="mobileMenu">
         <a href="/">🗺️ Roadmap</a>
@@ -63,7 +65,7 @@
 
     <div id="globalError" class="global-error" style="display:none;" role="alert"></div>
 
-    <div id="app-content">
+    <div id="app-content" class="layout-container">
         {% block content %}{% endblock %}
     </div>
 
