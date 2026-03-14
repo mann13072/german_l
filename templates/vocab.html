@@ -1,12 +1,12 @@
 {% if not partial %}{% extends "base.html" %}{% endif %}
-{% block title %}{{ level.name }}{% endblock %}
+
 
 {% block content %}
 <div class="page-header" style="--level-color: {{ level.color }};">
     <div class="breadcrumb">
-        <a href="/">Roadmap</a> › <span>{{ level.id|upper }}</span>
+        <a href="/">Roadmap</a> › <span>Vocabulary</span> › <span>{{ level.id|upper }}</span>
     </div>
-    <h1>📚 {{ level.name }}</h1>
+    <h1>📚 {{ level.name }} – Vocabulary</h1>
     <p>{{ level.description }}</p>
 
     <!-- Level navigation -->
