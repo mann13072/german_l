@@ -355,7 +355,48 @@ function switchTab(tabId, btn) {
 
 // ===== VOCAB CARD FLIP =====
 function flipCard(card) {
-    card.classList.toggle('flipped');
+    const isFlipped = card.classList.toggle('flipped');
+    
+    // If we just flipped it to the back, and definition isn't loaded, load it
+    if (isFlipped) {
+        const wordDe = card.querySelector('.vocab-de').textContent;
+        const definitionArea = card.querySelector('.vocab-definition-area');
+        if (definitionArea && !definitionArea.dataset.loaded) {
+            loadDefinition(wordDe, definitionArea);
+        }
+    }
+}
+
+async function loadDefinition(word, container) {
+    if (!word || !container) return;
+    
+    // Show loading state
+    container.innerHTML = '<div class="loading-dots">...</div>';
+    container.dataset.loaded = "true";
+    
+    try {
+        const response = await fetch(`/api/define/${encodeURIComponent(word)}`);
+        if (!response.ok) throw new Error('Not found');
+        
+        const data = await response.json();
+        
+        let html = '';
+        if (data.ipa) {
+            html += `<div class="vocab-ipa">[${escapeHtml(data.ipa)}]</div>`;
+        }
+        if (data.definition) {
+            html += `<div class="vocab-official-def">${escapeHtml(data.definition)}</div>`;
+        }
+        
+        if (html) {
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '';
+        }
+    } catch (e) {
+        console.log(`No official definition for ${word}`);
+        container.innerHTML = ''; // Just leave it empty if not found
+    }
 }
 
 function toggleAll(sectionId) {

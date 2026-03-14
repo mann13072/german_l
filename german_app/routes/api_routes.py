@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, current_app
 from ..utils.text_utils import normalize_text
 from ..utils.data_loader import load_data
 from ..utils.audio_manager import AudioManager
+from ..utils.dictionary_loader import DictionaryLoader
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -43,6 +44,18 @@ def get_audio_url():
     # Try to find high-quality native audio
     url = AudioManager.get_audio_url(word)
     return jsonify({"url": url})
+
+@api_bp.route("/define/<word>", methods=["GET"])
+def get_definition(word):
+    """Returns the definition and IPA for a word."""
+    if not word:
+        return jsonify({"error": "Word required"}), 400
+    
+    data = DictionaryLoader.get_definition(word)
+    if not data:
+        return jsonify({"error": "Definition not found"}), 404
+        
+    return jsonify(data)
 
 @api_bp.route("/health", methods=["GET"])
 def health():
