@@ -662,6 +662,61 @@ function clearUnlimitedAnswer(sectionId) {
     if (input) input.value = '';
 }
 
+// ===== CANVAS-BASED BURST ANIMATION (SPA COMPATIBLE) =====
+function burstAndNavigate(event, href) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const container = document.getElementById(DOM_IDS.bubbleContainer);
+    if (!container) {
+        loadLevel(href);
+        return;
+    }
+    
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+    canvas.width = window.innerWidth * window.devicePixelRatio;
+    canvas.height = window.innerHeight * window.devicePixelRatio;
+    document.body.appendChild(canvas);
+    
+    const ctx = canvas.getContext('2d');
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const colors = ['#667eea', '#764ba2', '#22c55e', '#3b82f6', '#f59e0b', '#ef4444', '#ec4899', '#8b5cf6'];
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+    const rect = event.target.getBoundingClientRect();
+    const clickX = event.clientX || (rect.left + rect.width / 2);
+    const clickY = event.clientY || (rect.top + rect.height / 2);
+    const particles = [];
+    
+    for (let i = 0; i < 200; i++) {
+        const angle = (Math.PI * 2 / 200) * i + Math.random() * 0.3;
+        const speed = Math.random() * 8 + 3;
+        particles.push({ x: clickX, y: clickY, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, size: Math.random() * 6 + 2, color: colors[i % colors.length], alpha: 1, decay: Math.random() * 0.02 + 0.015 });
+    }
+    
+    const startTime = performance.now();
+    function animate() {
+        ctx.clearRect(0, 0, screenW, screenH);
+        let alive = false;
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            if (p.alpha <= 0) continue;
+            alive = true;
+            p.x += p.vx; p.y += p.vy; p.alpha -= p.decay;
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.fillStyle = p.color;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+        }
+        if (alive && performance.now() - startTime < 800) requestAnimationFrame(animate);
+        else canvas.remove();
+    }
+    requestAnimationFrame(animate);
+    
+    // Smooth transition using AJAX instead of window.location
+    setTimeout(() => { loadLevel(href); }, 600);
+}
+
 // ===== SPA NAVIGATION (AJAX) =====
 async function loadLevel(url, pushState = true) {
     const container = document.getElementById('app-content');
@@ -669,10 +724,6 @@ async function loadLevel(url, pushState = true) {
         window.location.href = url;
         return;
     }
-
-    // Add a loading class for a subtle transition
-    container.style.opacity = '0.5';
-    container.style.pointerEvents = 'none';
 
     try {
         const response = await fetch(url, {
@@ -685,12 +736,6 @@ async function loadLevel(url, pushState = true) {
         
         // Update content
         container.innerHTML = html;
-        
-        // Extract and update title
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-        // The title might not be in the partial, so we might need a different way
-        // But block title is usually rendered. Let's try to find if there's any hint.
         
         // Re-execute scripts in the partial
         const scripts = container.querySelectorAll('script');
@@ -709,19 +754,9 @@ async function loadLevel(url, pushState = true) {
         // Scroll to top
         window.scrollTo(0, 0);
 
-        // Re-initialize any dynamic elements if needed
-        // (e.g., if any of your code relies on DOMContentLoaded, we might need to manually call init functions)
-        if (typeof nextQuiz !== 'undefined' && document.querySelector('.quiz-section')) {
-            // If it's a vocab page, we might want to ensure quiz is ready
-            // but usually the inline scripts handle this.
-        }
-
     } catch (error) {
         console.error('Failed to load level:', error);
-        window.location.href = url; // Fallback to full reload
-    } finally {
-        container.style.opacity = '1';
-        container.style.pointerEvents = 'auto';
+        window.location.href = url; 
     }
 }
 
