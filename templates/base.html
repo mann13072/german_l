@@ -7,6 +7,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script>
+        // Blocking script to prevent Flash of Light Mode (FOUC)
+        (function() {
+            try {
+                // Read directly from localStorage
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+                
+                // Also handle the initial theme toggle icon
+                window.addEventListener('DOMContentLoaded', () => {
+                    const toggleBtn = document.querySelector('.theme-toggle');
+                    if (toggleBtn) {
+                        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+                    }
+                });
+            } catch (e) {
+                console.error('Theme initialization failed:', e);
+            }
+        })();
+    </script>
 </head>
 <body>
     <nav class="navbar">
@@ -54,6 +76,8 @@
 
     <div id="globalError" class="global-error" style="display:none;" role="alert"></div>
 
-    {% block content %}{% endblock %}
+    <div id="app-content">
+        {% block content %}{% endblock %}
+    </div>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% if not partial %}{% extends "base.html" %}{% endif %}
 {% block title %}{{ level.name }} – Vocabulary{% endblock %}
 
 {% block content %}

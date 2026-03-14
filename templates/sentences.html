@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% if not partial %}{% extends "base.html" %}{% endif %}
 {% block title %}{{ level.name }} – Sentence Making{% endblock %}
 
 {% block content %}
@@ -116,11 +116,16 @@
 </script>
 <script src="{{ url_for('static', filename='js/generator.js') }}"></script>
 <script>
-    // Initialize unlimited practice for each section on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        sentenceData.forEach(function(sec) {
-            nextUnlimited(sec.id);
-        });
-    });
+    // Initialize unlimited practice for each section immediately
+    // This works both on initial page load and when content is swapped via AJAX
+    (function initSentences() {
+        if (typeof sentenceData !== 'undefined') {
+            sentenceData.forEach(function(sec) {
+                if (typeof nextUnlimited === 'function') {
+                    nextUnlimited(sec.id);
+                }
+            });
+        }
+    })();
 </script>
 {% endblock %}

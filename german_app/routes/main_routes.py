@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, current_app
+from flask import Blueprint, render_template, current_app, request
 from ..utils.data_loader import load_data
 
 main_bp = Blueprint('main', __name__)
@@ -7,6 +7,8 @@ main_bp = Blueprint('main', __name__)
 def index():
     try:
         data = load_data()
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return render_template("index.html", levels=data["levels"], partial=True)
         return render_template("index.html", levels=data["levels"])
     except Exception as e:
         current_app.logger.error(f"Error in index route: {str(e)}")
@@ -35,12 +37,17 @@ def vocab(level):
             "words": merged_words
         }
         
-        # We don't want to modify the cached data in-place
-        # But for this app's simplified logic, we just pass the modified level_data
-        # Create a shallow copy to be safer
         display_level_data = level_data.copy()
         display_level_data["vocab_sections"] = [merged_section]
         
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return render_template(
+                "vocab.html",
+                level=display_level_data,
+                all_levels=data["levels"],
+                partial=True
+            )
+            
         return render_template(
             "vocab.html",
             level=display_level_data,
@@ -62,6 +69,14 @@ def sentences(level):
         if not level_data:
             return "Level not found", 404
         
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return render_template(
+                "sentences.html",
+                level=level_data,
+                all_levels=data["levels"],
+                partial=True
+            )
+            
         return render_template(
             "sentences.html",
             level=level_data,
