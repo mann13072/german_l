@@ -1,6 +1,18 @@
 import unicodedata
 import re
 
+def strip_german_article(text: str) -> str:
+    """
+    Removes common German articles (der, die, das) from the start of a string.
+    Useful for dictionary lookups where articles aren't part of the headword.
+    """
+    if not isinstance(text, str):
+        return ""
+    
+    # Remove articles at the start (case-insensitive)
+    pattern = r'^(der|die|das)\s+'
+    return re.sub(pattern, '', text, flags=re.IGNORECASE).strip()
+
 def normalize_text(text: str) -> str:
     """
     Normalize German text for comparison in quiz answers.

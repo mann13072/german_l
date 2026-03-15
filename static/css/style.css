@@ -444,6 +444,13 @@ input { font-family: inherit; outline: none; }
 .vocab-back.has-definition {
     justify-content: flex-start; /* Start from top only when more content arrives */
 }
+.vocab-back-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
 .vocab-en { font-size: 1.3rem; font-weight: 800; word-break: break-word; }
 
 .vocab-definition-area { width: 100%; display: none; }

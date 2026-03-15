@@ -1,5 +1,6 @@
 import requests
 import os
+from .text_utils import strip_german_article
 
 class DictionaryLoader:
     """
@@ -14,13 +15,19 @@ class DictionaryLoader:
         Returns a dict with definition and ipa, or None if not found.
         """
         try:
-            # The API seems to prefer capitalized nouns in German
-            # But let's try as is first, then capitalized if it's a noun
-            response = requests.get(cls.BASE_URL.format(word=word), timeout=5)
+            # 1. Strip German articles (Der, Die, Das) if present
+            # Dictionary APIs usually want the base noun (e.g., 'Haltestelle' instead of 'Die Haltestelle')
+            base_word = strip_german_article(word)
             
-            # If not found, try capitalized (common for German nouns)
-            if response.status_code == 404 and not word[0].isupper():
-                response = requests.get(cls.BASE_URL.format(word=word.capitalize()), timeout=5)
+            # The API prefers capitalized nouns in German
+            # Let's try capitalized first
+            lookup_word = base_word.capitalize()
+            
+            response = requests.get(cls.BASE_URL.format(word=lookup_word), timeout=5)
+            
+            # If not found, try lowercased (for verbs, adjectives, etc.)
+            if response.status_code == 404:
+                response = requests.get(cls.BASE_URL.format(word=base_word.lower()), timeout=5)
                 
             if response.status_code != 200:
                 return None
