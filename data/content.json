@@ -11499,6 +11499,85 @@
               ]
             }
           ]
+        },
+        {
+          "id": "spiegel_news",
+          "title": "Der Spiegel – News Headlines (B2/C1)",
+          "explanation": "Headlines from Der Spiegel using real-world news vocabulary and grammar structures.",
+          "exercises": [
+            {
+              "prompt": "Qatar wards off rocket attack.",
+              "answer": "Katar wehrt Raketenangriff ab.",
+              "hint": "Katar = Qatar; abwehren = to ward off",
+              "words": [
+                "Katar",
+                "wehrt",
+                "Raketenangriff",
+                "ab"
+              ]
+            },
+            {
+              "prompt": "This shipowner is earning brilliantly from the Strait of Hormuz.",
+              "answer": "Dieser Reeder verdient glänzend an der Straße von Hormus.",
+              "hint": "Reeder = shipowner; glänzend = brilliantly",
+              "words": [
+                "Dieser",
+                "Reeder",
+                "verdient",
+                "glänzend",
+                "an",
+                "der",
+                "Straße",
+                "von",
+                "Hormus"
+              ]
+            },
+            {
+              "prompt": "Nvidia wants to generate one trillion dollars in turnover with AI chips.",
+              "answer": "Nvidia will eine Billion Dollar mit KI-Chips umsetzen.",
+              "hint": "umsetzen = generate turnover; Billion = trillion (in German)",
+              "words": [
+                "Nvidia",
+                "will",
+                "eine",
+                "Billion",
+                "Dollar",
+                "mit",
+                "KI-Chips",
+                "umsetzen"
+              ]
+            },
+            {
+              "prompt": "Trump's war with Iran makes China look good.",
+              "answer": "Trumps Irankrieg lässt China gut aussehen.",
+              "hint": "lassen + verb = make/let; aussehen = look",
+              "words": [
+                "Trumps",
+                "Irankrieg",
+                "lässt",
+                "China",
+                "gut",
+                "aussehen"
+              ]
+            },
+            {
+              "prompt": "War in the Middle East: This pipeline is what matters now.",
+              "answer": "Krieg in Nahost: Auf diese Pipeline kommt es jetzt an.",
+              "hint": "Nahost = Middle East; es kommt auf ... an = it depends on/matters",
+              "words": [
+                "Krieg",
+                "in",
+                "Nahost",
+                "Auf",
+                "diese",
+                "Pipeline",
+                "kommt",
+                "es",
+                "jetzt",
+                "an"
+              ]
+            }
+          ]
         }
       ]
     }

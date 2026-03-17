@@ -71,7 +71,7 @@
                        placeholder="Type meaning..." 
                        onkeypress="if(event.key==='Enter') QuizEngine.check('{{ sec.id }}')">
                 <div class="quiz-buttons">
-                    <button class="btn btn-primary" style="background: {{ level.color }};" 
+                    <button class="btn btn-primary" style="background-color: {{ level.color }};" 
                             onclick="QuizEngine.check('{{ sec.id }}')">Check</button>
                     <button class="btn btn-sm" onclick="QuizEngine.next('{{ sec.id }}')">Skip →</button>
                 </div>

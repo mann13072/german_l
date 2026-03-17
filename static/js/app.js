@@ -259,3 +259,233 @@ function playSentenceAudio(sid) {
 // Legacy cleanup
 function playAudio(t) { AudioEngine.play(t); }
 function playVocabAudio(e, t) { if(e) e.stopPropagation(); AudioEngine.play(t); }
+
+// ====== 7. SENTENCE PRACTICE CONTROLLER (UNLIMITED MODE) ======
+let unlimitedState = {};
+
+/**
+ * Loads the next exercise for a specific section.
+ * Called by the "Next Sentence" button and during initialization.
+ */
+function nextUnlimited(sectionId) {
+    if (typeof SentenceGenerator === 'undefined') {
+        console.error("SentenceGenerator engine not loaded.");
+        return;
+    }
+
+    const exercise = SentenceGenerator.getExercise(sectionId);
+    if (!exercise) {
+        console.warn(`No generator found for section: ${sectionId}`);
+        return;
+    }
+
+    // Initialize state for this section if it doesn't exist
+    if (!unlimitedState[sectionId]) {
+        unlimitedState[sectionId] = { 
+            correct: 0, 
+            wrong: 0, 
+            total: 0, 
+            userWords: [],
+            exercise: null 
+        };
+    }
+
+    const state = unlimitedState[sectionId];
+    state.exercise = exercise;
+    state.userWords = [];
+
+    // Update UI elements
+    const elements = {
+        prompt: document.getElementById(`uPrompt-${sectionId}`),
+        hint: document.getElementById(`uHint-${sectionId}`),
+        feedback: document.getElementById(`uFeedback-${sectionId}`),
+        input: document.getElementById(`uInput-${sectionId}`),
+        bank: document.getElementById(`uBank-${sectionId}`),
+        answerArea: document.getElementById(`uAnswer-${sectionId}`)
+    };
+
+    if (elements.prompt) elements.prompt.textContent = exercise.prompt;
+    if (elements.hint) {
+        elements.hint.textContent = exercise.hint || "No hint available.";
+        elements.hint.style.display = 'none';
+    }
+    if (elements.feedback) {
+        elements.feedback.textContent = '';
+        elements.feedback.className = 'exercise-feedback';
+    }
+    if (elements.input) {
+        elements.input.value = '';
+        elements.input.classList.remove('correct', 'incorrect');
+    }
+
+    renderWordBank(sectionId);
+    renderAnswerArea(sectionId);
+}
+
+/**
+ * Renders the clickable word chips in the word bank.
+ */
+function renderWordBank(sectionId) {
+    const bank = document.getElementById(`uBank-${sectionId}`);
+    if (!bank || !unlimitedState[sectionId]) return;
+
+    const words = unlimitedState[sectionId].exercise.words;
+    const usedIndices = unlimitedState[sectionId].userWords.map(uw => uw.index);
+    bank.innerHTML = '';
+
+    words.forEach((word, index) => {
+        const btn = document.createElement('button');
+        const isUsed = usedIndices.includes(index);
+        
+        btn.className = `word-tile ${isUsed ? 'used' : ''}`;
+        btn.textContent = word;
+        btn.disabled = isUsed;
+        btn.onclick = () => {
+            if (!isUsed) addWordToAnswer(sectionId, word, index);
+        };
+        bank.appendChild(btn);
+    });
+}
+
+/**
+ * Adds a word to the user's constructed answer.
+ */
+function addWordToAnswer(sectionId, word, index) {
+    const state = unlimitedState[sectionId];
+    state.userWords.push({ text: word, index: index });
+    renderWordBank(sectionId);
+    renderAnswerArea(sectionId);
+}
+
+/**
+ * Renders the words chosen by the user in the answer area.
+ */
+function renderAnswerArea(sectionId) {
+    const area = document.getElementById(`uAnswer-${sectionId}`);
+    if (!area || !unlimitedState[sectionId]) return;
+
+    const words = unlimitedState[sectionId].userWords;
+    
+    if (words.length === 0) {
+        area.innerHTML = '<span class="answer-placeholder">Click words from the bank above to build your sentence...</span>';
+        return;
+    }
+
+    area.innerHTML = '';
+    words.forEach((wordObj, listIndex) => {
+        const span = document.createElement('span');
+        span.className = 'word-tile'; // Using word-tile for consistent styling in answer area
+        span.textContent = wordObj.text;
+        span.title = "Click to remove";
+        span.onclick = () => {
+            unlimitedState[sectionId].userWords.splice(listIndex, 1);
+            renderWordBank(sectionId);
+            renderAnswerArea(sectionId);
+        };
+        area.appendChild(span);
+    });
+}
+
+/**
+ * Validates the user's answer against the correct German sentence.
+ */
+function checkUnlimited(sectionId) {
+    const state = unlimitedState[sectionId];
+    if (!state || !state.exercise) return;
+
+    const inputEl = document.getElementById(`uInput-${sectionId}`);
+    const feedbackEl = document.getElementById(`uFeedback-${sectionId}`);
+    
+    // Get answer from either the word bank or the text input
+    const typedAns = inputEl ? inputEl.value.trim() : "";
+    const bankAns = state.userWords.map(w => w.text).join(' ');
+    const userAns = typedAns || bankAns;
+
+    if (!userAns) {
+        if (feedbackEl) {
+            feedbackEl.textContent = "⚠️ Please provide an answer first!";
+            feedbackEl.className = "exercise-feedback warning";
+        }
+        return;
+    }
+
+    // Normalization for comparison
+    const normalize = (str) => str.replace(/[.!?]/g, "").trim().toLowerCase();
+    const isCorrect = normalize(userAns) === normalize(state.exercise.answer);
+
+    state.total++;
+    if (isCorrect) {
+        state.correct++;
+        if (feedbackEl) {
+            feedbackEl.textContent = "✅ Correct! Well done.";
+            feedbackEl.className = "exercise-feedback correct";
+        }
+        if (inputEl) inputEl.classList.add('correct');
+        
+        // Auto-advance after success
+        setTimeout(() => nextUnlimited(sectionId), 1500);
+    } else {
+        state.wrong++;
+        if (feedbackEl) {
+            feedbackEl.textContent = `❌ Not quite. Correct: "${state.exercise.answer}"`;
+            feedbackEl.className = "exercise-feedback incorrect";
+        }
+        if (inputEl) inputEl.classList.add('incorrect');
+    }
+
+    updateUnlimitedStats(sectionId);
+}
+
+/**
+ * Updates the score badges and progress bar.
+ */
+function updateUnlimitedStats(sectionId) {
+    const state = unlimitedState[sectionId];
+    const els = {
+        correct: document.getElementById(`uCorrect-${sectionId}`),
+        wrong: document.getElementById(`uWrong-${sectionId}`),
+        total: document.getElementById(`uTotal-${sectionId}`),
+        progress: document.getElementById(`uProgress-${sectionId}`),
+        scoreText: document.getElementById(`uScoreText-${sectionId}`)
+    };
+
+    if (els.correct) els.correct.textContent = `✅ ${state.correct}`;
+    if (els.wrong) els.wrong.textContent = `❌ ${state.wrong}`;
+    if (els.total) els.total.textContent = `📝 ${state.total} practiced`;
+
+    const percentage = Math.round((state.correct / state.total) * 100) || 0;
+    if (els.progress) els.progress.style.width = `${percentage}%`;
+    if (els.scoreText) els.scoreText.textContent = `Session Accuracy: ${percentage}%`;
+}
+
+/**
+ * UI Helpers for Hint, Reveal, and Clear
+ */
+function toggleUnlimitedHint(sectionId) {
+    const hint = document.getElementById(`uHint-${sectionId}`);
+    if (hint) {
+        hint.style.display = (hint.style.display === 'none' || !hint.style.display) ? 'block' : 'none';
+    }
+}
+
+function revealUnlimited(sectionId) {
+    const state = unlimitedState[sectionId];
+    const feedback = document.getElementById(`uFeedback-${sectionId}`);
+    if (state && feedback) {
+        feedback.textContent = `💡 The answer is: "${state.exercise.answer}"`;
+        feedback.className = "exercise-feedback info";
+    }
+}
+
+function clearUnlimitedAnswer(sectionId) {
+    const state = unlimitedState[sectionId];
+    if (state) state.userWords = [];
+    
+    const input = document.getElementById(`uInput-${sectionId}`);
+    if (input) {
+        input.value = '';
+        input.classList.remove('correct', 'incorrect');
+    }
+    
+    renderAnswerArea(sectionId);
+}
