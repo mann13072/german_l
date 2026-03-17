@@ -1623,6 +1623,16 @@ const SentenceGenerator = (function () {
             const words = s.de.replace(/[.,!?]/g, "").split(" ").filter(w => w);
             return { prompt: s.en, answer: s.de, words: shuffleArray(words), hint: "Konjunktiv I: sei/habe/komme/wisse (indirect speech)" };
         },
+
+        "spiegel_news": function () {
+            // Find the B2 level and the spiegel_news section in sentenceData
+            const b2Level = typeof sentenceData !== 'undefined' ? sentenceData : [];
+            // If we are in the sentences.html, sentenceData is level.sentence_sections
+            const section = b2Level.find(s => s.id === 'spiegel_news');
+            const s = section ? pick(section.exercises) : { prompt: "Qatar wards off rocket attack.", answer: "Katar wehrt Raketenangriff ab.", words: ["Katar", "wehrt", "Raketenangriff", "ab"], hint: "Katar = Qatar; abwehren = to ward off" };
+            const words = s.words || s.answer.replace(/[.,:!?]/g, "").split(" ").filter(w => w);
+            return { prompt: s.prompt, answer: s.answer, words: shuffleArray(words), hint: s.hint || "News headline from Der Spiegel" };
+        },
     };
 
     // ========== SESSION TRACKING ==========

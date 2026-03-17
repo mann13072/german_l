@@ -116,16 +116,23 @@
 </script>
 <script src="{{ url_for('static', filename='js/generator.js') }}"></script>
 <script>
-    // Initialize unlimited practice for each section immediately
-    // This works both on initial page load and when content is swapped via AJAX
-    (function initSentences() {
-        if (typeof sentenceData !== 'undefined') {
+    // Initialize unlimited practice for each section
+    function initSentences() {
+        if (typeof sentenceData !== 'undefined' && typeof nextUnlimited === 'function') {
             sentenceData.forEach(function(sec) {
-                if (typeof nextUnlimited === 'function') {
-                    nextUnlimited(sec.id);
-                }
+                nextUnlimited(sec.id);
             });
+        } else if (typeof sentenceData !== 'undefined') {
+            // If nextUnlimited isn't ready yet, retry in a bit
+            setTimeout(initSentences, 100);
         }
-    })();
+    }
+
+    // Run on load
+    if (document.readyState === 'complete') {
+        initSentences();
+    } else {
+        window.addEventListener('load', initSentences);
+    }
 </script>
 {% endblock %}
