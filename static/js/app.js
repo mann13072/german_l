@@ -489,3 +489,23 @@ function clearUnlimitedAnswer(sectionId) {
     
     renderAnswerArea(sectionId);
 }
+
+// ====== 8. TAB SWITCHER ======
+function switchTab(sectionId, btnElement) {
+    // Hide all tab content panels
+    document.querySelectorAll('.tab-content').forEach(panel => {
+        panel.classList.remove('active');
+    });
+
+    // Deactivate all tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // Show the selected tab panel
+    const target = document.getElementById(`tab-${sectionId}`);
+    if (target) target.classList.add('active');
+
+    // Highlight the clicked button
+    if (btnElement) btnElement.classList.add('active');
+}
