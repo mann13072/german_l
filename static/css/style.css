@@ -48,6 +48,8 @@ body {
     color: var(--text-primary);
     line-height: 1.7;
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
 }
 a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
 button { cursor: pointer; font-family: inherit; border: none; outline: none; }
@@ -746,15 +748,18 @@ input { font-family: inherit; outline: none; }
 
 /* ===== LANDING PAGE ===== */
 .words-background {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    min-height: 100%;
     z-index: -1;
     overflow: hidden;
-    opacity: 0.08;
-    pointer-events: none;
+    opacity: 0.08; /* Restored original lumination */
+    pointer-events: none; /* Container itself doesn't block clicks */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .word-line {
@@ -762,13 +767,38 @@ input { font-family: inherit; outline: none; }
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-primary);
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     display: flex;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+/* Pause animation on line hover to make targeting specific words easier */
+.word-line:hover {
+    animation-play-state: paused;
 }
 
 .word-line span {
     display: inline-block;
     padding-right: 2rem;
+    pointer-events: none;
+}
+
+/* Individual word styling within the background lines */
+.bg-word {
+    display: inline-block;
+    padding: 0 0.4rem;
+    transition: all 0.2s ease;
+    cursor: default;
+    border-radius: 6px;
+    pointer-events: auto; /* Enable hover on the word itself */
+}
+
+.bg-word:hover {
+    color: var(--bg-primary);
+    background: var(--text-primary);
+    transform: scale(1.1);
+    opacity: 1 !important;
 }
 
 .scroll-right {
@@ -1106,6 +1136,51 @@ input { font-family: inherit; outline: none; }
         transform: scale(2);
         opacity: 0;
     }
+}
+
+/* ===== SPOTLIGHT BACKGROUND CLOUD ===== */
+.spotlight-container {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-primary);
+    z-index: -1;
+    overflow: hidden;
+}
+
+.word-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.base-layer {
+    opacity: 0.15;
+    color: var(--text-muted);
+}
+
+.highlight-layer {
+    opacity: 0.9;
+    color: var(--text-primary);
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.8), 0 0 5px rgba(168, 85, 247, 0.4);
+    /* The mask follows the mouse via CSS variables */
+    mask-image: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 20%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 20%, transparent 100%);
+}
+
+[data-theme="dark"] .base-layer {
+    color: #334155;
+}
+
+[data-theme="dark"] .highlight-layer {
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.9), 0 0 10px rgba(168, 85, 247, 0.6);
+}
+
+.cloud-word {
+    position: absolute;
+    font-weight: 800;
+    white-space: nowrap;
+    transition: transform 0.3s ease;
 }
 
 /* Screen flash effect */
